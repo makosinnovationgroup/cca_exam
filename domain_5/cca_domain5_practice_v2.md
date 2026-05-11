@@ -31,12 +31,12 @@ difficulty: harder-than-real-exam
 
 | Task | Questions | Focus |
 |------|-----------|-------|
-| 5.1 | Q1-Q6 | Case facts (app-injected) vs memory tool vs auto memory |
-| 5.2 | Q7-Q10 | Escalation triggers and structured handoff |
-| 5.3 | Q11-Q15 | Error propagation across agent boundaries |
-| 5.4 | Q16-Q21 | Scratchpads, large codebases, context isolation |
-| 5.5 | Q22-Q25 | Human review, stratified sampling, field-level confidence |
-| 5.6 | Q26-Q30 | Provenance, claim-source mappings, conflict annotation |
+| 5.1 | [[#^d5-q-1\|Q1]]-[[#^d5-q-6\|Q6]] | Case facts (app-injected) vs memory tool vs auto memory |
+| 5.2 | [[#^d5-q-7\|Q7]]-[[#^d5-q-10\|Q10]] | Escalation triggers and structured handoff |
+| 5.3 | [[#^d5-q-11\|Q11]]-[[#^d5-q-15\|Q15]] | Error propagation across agent boundaries |
+| 5.4 | [[#^d5-q-16\|Q16]]-[[#^d5-q-21\|Q21]] | Scratchpads, large codebases, context isolation |
+| 5.5 | [[#^d5-q-22\|Q22]]-[[#^d5-q-25\|Q25]] | Human review, stratified sampling, field-level confidence |
+| 5.6 | [[#^d5-q-26\|Q26]]-[[#^d5-q-30\|Q30]] | Provenance, claim-source mappings, conflict annotation |
 
 ---
 
@@ -375,12 +375,12 @@ When should an agent run `/compact` proactively? ^d5-q-18
 A. After every turn to keep context lean.
 B. Never; let auto-compaction handle it.
 C. When the agent's response latency increases noticeably.
-D. At natural breakpoints (around 60% context utilization, after completing a logical chunk of work) so compaction happens on stable ground rather than mid-task. Auto-compaction kicks in around 64-75% utilization, which can interrupt mid-task work.
+D. At natural breakpoints (after completing a logical chunk of work, well before context fills) so compaction happens on stable ground rather than mid-task. Auto-compaction kicks in based on a configured token trigger (default 150,000 input tokens for the API's `compact_20260112` strategy), which may interrupt mid-task work if you don't pre-empt it.
 
 > [!success]- Reveal answer
 > **Correct: D**
 >
-> Proactive `/compact` at logical breakpoints avoids mid-task interruption. The documented threshold is around 60% to stay ahead of the 64-75% auto-compact range.
+> Proactive `/compact` at logical breakpoints avoids mid-task interruption. The compaction beta API (`compact-2026-01-12`) documents a default trigger of 150,000 input tokens, which can be tuned via the `trigger` parameter.
 >
 > **Why others are wrong:**
 > - A: Per-turn compaction is overkill and wastes context summarizing work that hasn't accumulated yet.
@@ -628,19 +628,19 @@ D. **Make synthesis structural rather than prose**: instead of producing a prose
 
 | Q | A | Q | A | Q | A | Q | A | Q | A | Q | A |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | B | 6 | D | 11 | A | 16 | C | 21 | B | 26 | D |
-| 2 | D | 7 | A | 12 | C | 17 | B | 22 | D | 27 | A |
-| 3 | A | 8 | C | 13 | B | 18 | D | 23 | A | 28 | C |
-| 4 | C | 9 | B | 14 | D | 19 | A | 24 | C | 29 | B |
-| 5 | B | 10 | D | 15 | A | 20 | C | 25 | B | 30 | D |
+| [[#^d5-q-1\|1]] | B | [[#^d5-q-6\|6]] | D | [[#^d5-q-11\|11]] | A | [[#^d5-q-16\|16]] | C | [[#^d5-q-21\|21]] | B | [[#^d5-q-26\|26]] | D |
+| [[#^d5-q-2\|2]] | D | [[#^d5-q-7\|7]] | A | [[#^d5-q-12\|12]] | C | [[#^d5-q-17\|17]] | B | [[#^d5-q-22\|22]] | D | [[#^d5-q-27\|27]] | A |
+| [[#^d5-q-3\|3]] | A | [[#^d5-q-8\|8]] | C | [[#^d5-q-13\|13]] | B | [[#^d5-q-18\|18]] | D | [[#^d5-q-23\|23]] | A | [[#^d5-q-28\|28]] | C |
+| [[#^d5-q-4\|4]] | C | [[#^d5-q-9\|9]] | B | [[#^d5-q-14\|14]] | D | [[#^d5-q-19\|19]] | A | [[#^d5-q-24\|24]] | C | [[#^d5-q-29\|29]] | B |
+| [[#^d5-q-5\|5]] | B | [[#^d5-q-10\|10]] | D | [[#^d5-q-15\|15]] | A | [[#^d5-q-20\|20]] | C | [[#^d5-q-25\|25]] | B | [[#^d5-q-30\|30]] | D |
 
 ## Stats summary
 
 - **Answer distribution:** A=7 (23%) · B=8 (27%) · C=7 (23%) · D=8 (27%)
-- **Hardest questions** (subtle distinctions, two-look-right options): Q2 (memory tool protocol details), Q6 (architecture vs model "memory"), Q14 (partial-vs-complete distinction rationale), Q21 (compaction vs context editing trade-offs), Q23 (field-level vs record-level confidence), Q30 (structural vs prose synthesis)
-- **Trap questions:** Q7 and Q10 (sentiment-based escalation anti-pattern), Q22 (random vs stratified sampling), Q23 (record-level confidence is the wrong unit)
-- **Anti-pattern questions:** Q11-Q12 (silent failures, retrying non-retryable), Q26-Q30 (prose-based provenance and "cite where possible")
+- **Hardest questions** (subtle distinctions, two-look-right options): [[#^d5-q-2\|Q2]] (memory tool protocol details), [[#^d5-q-6\|Q6]] (architecture vs model "memory"), [[#^d5-q-14\|Q14]] (partial-vs-complete distinction rationale), [[#^d5-q-21\|Q21]] (compaction vs context editing trade-offs), [[#^d5-q-23\|Q23]] (field-level vs record-level confidence), [[#^d5-q-30\|Q30]] (structural vs prose synthesis)
+- **Trap questions:** [[#^d5-q-7\|Q7]] and [[#^d5-q-10\|Q10]] (sentiment-based escalation anti-pattern), [[#^d5-q-22\|Q22]] (random vs stratified sampling), [[#^d5-q-23\|Q23]] (record-level confidence is the wrong unit)
+- **Anti-pattern questions:** [[#^d5-q-11\|Q11]]-[[#^d5-q-12\|Q12]] (silent failures, retrying non-retryable), [[#^d5-q-26\|Q26]]-[[#^d5-q-30\|Q30]] (prose-based provenance and "cite where possible")
 
 ---
 
-*Domain 5 weight: **15%** of the exam. Companion roadmap: [[cca_domain5_roadmap.md]]. Companion exercises: [[cca_domain5_exercises.md]].*
+*Domain 5 weight: **15%** of the exam. Companion roadmap: [[cca_domain5_roadmap]]. Companion exercises: [[cca_domain5_exercises]].*

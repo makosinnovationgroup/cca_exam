@@ -31,12 +31,12 @@ difficulty: harder-than-real-exam
 
 | Task | Questions | Focus |
 |------|-----------|-------|
-| 3.1 | Q1-Q5 | CLAUDE.md hierarchy, `@import`, auto memory |
-| 3.2 | Q6-Q12 | Skills, slash commands, frontmatter, subagents |
-| 3.3 | Q13-Q16 | Path-specific rules, glob frontmatter |
-| 3.4 | Q17-Q21 | Plan mode vs direct execution, Explore/Plan subagents |
-| 3.5 | Q22-Q25 | Iterative refinement, interview pattern |
-| 3.6 | Q26-Q30 | CI/CD integration, headless mode, schema validation |
+| 3.1 | [[#^d3-q-1\|Q1]]-[[#^d3-q-5\|Q5]] | CLAUDE.md hierarchy, `@import`, auto memory |
+| 3.2 | [[#^d3-q-6\|Q6]]-[[#^d3-q-12\|Q12]] | Skills, slash commands, frontmatter, subagents |
+| 3.3 | [[#^d3-q-13\|Q13]]-[[#^d3-q-16\|Q16]] | Path-specific rules, glob frontmatter |
+| 3.4 | [[#^d3-q-17\|Q17]]-[[#^d3-q-21\|Q21]] | Plan mode vs direct execution, Explore/Plan subagents |
+| 3.5 | [[#^d3-q-22\|Q22]]-[[#^d3-q-25\|Q25]] | Iterative refinement, interview pattern |
+| 3.6 | [[#^d3-q-26\|Q26]]-[[#^d3-q-30\|Q30]] | CI/CD integration, headless mode, schema validation |
 
 ---
 
@@ -636,19 +636,19 @@ D. Switch from `-p` to interactive mode for human-in-the-loop review.
 
 | Q | A | Q | A | Q | A | Q | A | Q | A | Q | A |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | D | 6 | B | 11 | A | 16 | C | 21 | D | 26 | B |
-| 2 | B | 7 | A | 12 | C | 17 | D | 22 | B | 27 | A |
-| 3 | A | 8 | C | 13 | D | 18 | B | 23 | A | 28 | C |
-| 4 | C | 9 | D | 14 | B | 19 | A | 24 | C | 29 | D |
-| 5 | D | 10 | B | 15 | A | 20 | C | 25 | D | 30 | B |
+| [[#^d3-q-1\|1]] | D | [[#^d3-q-6\|6]] | B | [[#^d3-q-11\|11]] | A | [[#^d3-q-16\|16]] | C | [[#^d3-q-21\|21]] | D | [[#^d3-q-26\|26]] | B |
+| [[#^d3-q-2\|2]] | B | [[#^d3-q-7\|7]] | A | [[#^d3-q-12\|12]] | C | [[#^d3-q-17\|17]] | D | [[#^d3-q-22\|22]] | B | [[#^d3-q-27\|27]] | A |
+| [[#^d3-q-3\|3]] | A | [[#^d3-q-8\|8]] | C | [[#^d3-q-13\|13]] | D | [[#^d3-q-18\|18]] | B | [[#^d3-q-23\|23]] | A | [[#^d3-q-28\|28]] | C |
+| [[#^d3-q-4\|4]] | C | [[#^d3-q-9\|9]] | D | [[#^d3-q-14\|14]] | B | [[#^d3-q-19\|19]] | A | [[#^d3-q-24\|24]] | C | [[#^d3-q-29\|29]] | D |
+| [[#^d3-q-5\|5]] | D | [[#^d3-q-10\|10]] | B | [[#^d3-q-15\|15]] | A | [[#^d3-q-20\|20]] | C | [[#^d3-q-25\|25]] | D | [[#^d3-q-30\|30]] | B |
 
 ## Stats summary
 
 - **Answer distribution:** A=7 (23%) · B=8 (27%) · C=7 (23%) · D=8 (27%)
-- **Hardest questions** (subtle distinctions, two-look-right options): Q8 (`disable-model-invocation` vs `user-invocable`), Q12 (`paths` interpretation), Q16 (path-scoped rules vs context bloat), Q23 (when to batch vs interview), Q25 (prior context inclusion), Q28 (schema feasibility)
-- **Trap questions:** Q15 (testing whether path globs really matter), Q22 (interview pattern vs plan mode), Q29 (`--agent` vs `@`-mention)
-- **Fabricated-field traps:** Q6 (`verbose: false`), Q8 (`auto-invoke: false`, `manual-only: true`), Q11 (`argument-name`, `inputs`, `prompt-arg`), Q26 (`--validate-schema`, `--strict-schema`)
+- **Hardest questions** (subtle distinctions, two-look-right options): [[#^d3-q-8\|Q8]] (`disable-model-invocation` vs `user-invocable`), [[#^d3-q-12\|Q12]] (`paths` interpretation), [[#^d3-q-16\|Q16]] (path-scoped rules vs context bloat), [[#^d3-q-23\|Q23]] (when to batch vs interview), [[#^d3-q-25\|Q25]] (prior context inclusion), [[#^d3-q-28\|Q28]] (schema feasibility)
+- **Trap questions:** [[#^d3-q-15\|Q15]] (testing whether path globs really matter), [[#^d3-q-22\|Q22]] (interview pattern vs plan mode), [[#^d3-q-29\|Q29]] (`--agent` vs `@`-mention)
+- **Fabricated-field traps:** [[#^d3-q-6\|Q6]] (`verbose: false`), [[#^d3-q-8\|Q8]] (`auto-invoke: false`, `manual-only: true`), [[#^d3-q-11\|Q11]] (`argument-name`, `inputs`, `prompt-arg`), [[#^d3-q-26\|Q26]] (`--validate-schema`, `--strict-schema`)
 
 ---
 
-*Domain 3 weight: **20%** of the exam. Companion roadmap: [[cca_domain3_roadmap.md]]. Companion exercises: [[cca_domain3_exercises.md]].*
+*Domain 3 weight: **20%** of the exam. Companion roadmap: [[cca_domain3_roadmap]]. Companion exercises: [[cca_domain3_exercises]].*

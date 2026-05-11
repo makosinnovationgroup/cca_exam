@@ -31,13 +31,13 @@ difficulty: harder-than-real-exam
 
 | Task | Questions | Focus |
 |------|-----------|-------|
-| 1.1 | Q1-Q5 | Agentic loops, `stop_reason`, iteration limits |
-| 1.2 | Q6-Q9 | Coordinator orchestration, hub-and-spoke, iterative refinement |
-| 1.3 | Q10-Q14 | Subagent invocation, `Agent` tool, context passing |
-| 1.4 | Q15-Q19 | Multi-step workflows, hook-enforced compliance |
-| 1.5 | Q20-Q23 | Hook events, deny pattern, matcher patterns |
-| 1.6 | Q24-Q27 | Prompt chaining vs dynamic decomposition |
-| 1.7 | Q28-Q30 | Sessions: resume, fork, fresh-with-summary |
+| 1.1 | [[#^d1-q-1\|Q1]]-[[#^d1-q-5\|Q5]] | Agentic loops, `stop_reason`, iteration limits |
+| 1.2 | [[#^d1-q-6\|Q6]]-[[#^d1-q-9\|Q9]] | Coordinator orchestration, hub-and-spoke, iterative refinement |
+| 1.3 | [[#^d1-q-10\|Q10]]-[[#^d1-q-14\|Q14]] | Subagent invocation, `Agent` tool, context passing |
+| 1.4 | [[#^d1-q-15\|Q15]]-[[#^d1-q-19\|Q19]] | Multi-step workflows, hook-enforced compliance |
+| 1.5 | [[#^d1-q-20\|Q20]]-[[#^d1-q-23\|Q23]] | Hook events, deny pattern, matcher patterns |
+| 1.6 | [[#^d1-q-24\|Q24]]-[[#^d1-q-27\|Q27]] | Prompt chaining vs dynamic decomposition |
+| 1.7 | [[#^d1-q-28\|Q28]]-[[#^d1-q-30\|Q30]] | Sessions: resume, fork, fresh-with-summary |
 
 ---
 
@@ -650,19 +650,19 @@ D. No — a fork cannot itself be forked. Forks are one level deep by design to 
 
 | Q | A | Q | A | Q | A | Q | A | Q | A | Q | A |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | B | 6 | D | 11 | A | 16 | C | 21 | B | 26 | D |
-| 2 | A | 7 | A | 12 | C | 17 | D | 22 | D | 27 | A |
-| 3 | D | 8 | C | 13 | D | 18 | B | 23 | A | 28 | C |
-| 4 | C | 9 | B | 14 | B | 19 | A | 24 | C | 29 | B |
-| 5 | A | 10 | D | 15 | A | 20 | C | 25 | B | 30 | D |
+| [[#^d1-q-1\|1]] | B | [[#^d1-q-6\|6]] | D | [[#^d1-q-11\|11]] | A | [[#^d1-q-16\|16]] | C | [[#^d1-q-21\|21]] | B | [[#^d1-q-26\|26]] | D |
+| [[#^d1-q-2\|2]] | A | [[#^d1-q-7\|7]] | A | [[#^d1-q-12\|12]] | C | [[#^d1-q-17\|17]] | D | [[#^d1-q-22\|22]] | D | [[#^d1-q-27\|27]] | A |
+| [[#^d1-q-3\|3]] | D | [[#^d1-q-8\|8]] | C | [[#^d1-q-13\|13]] | D | [[#^d1-q-18\|18]] | B | [[#^d1-q-23\|23]] | A | [[#^d1-q-28\|28]] | C |
+| [[#^d1-q-4\|4]] | C | [[#^d1-q-9\|9]] | B | [[#^d1-q-14\|14]] | B | [[#^d1-q-19\|19]] | A | [[#^d1-q-24\|24]] | C | [[#^d1-q-29\|29]] | B |
+| [[#^d1-q-5\|5]] | A | [[#^d1-q-10\|10]] | D | [[#^d1-q-15\|15]] | A | [[#^d1-q-20\|20]] | C | [[#^d1-q-25\|25]] | B | [[#^d1-q-30\|30]] | D |
 
 ## Stats summary
 
 - **Answer distribution:** A=8 (27%) · B=7 (23%) · C=7 (23%) · D=8 (27%)
-- **Hardest questions** (subtle distinctions, two-look-right options): Q2, Q9, Q14, Q18, Q22, Q23, Q28
-- **Trap questions** (looks like one task, tests another): Q9 (looks like 1.2, tests 5.6 provenance), Q22 (looks like 1.5, tests data normalization pattern)
-- **Common-anti-pattern questions:** Q1 (text parsing), Q7 (chain topology), Q10 (missing Agent tool), Q15-Q16 (prompts for hard rules)
+- **Hardest questions** (subtle distinctions, two-look-right options): [[#^d1-q-2\|Q2]], [[#^d1-q-9\|Q9]], [[#^d1-q-14\|Q14]], [[#^d1-q-18\|Q18]], [[#^d1-q-22\|Q22]], [[#^d1-q-23\|Q23]], [[#^d1-q-28\|Q28]]
+- **Trap questions** (looks like one task, tests another): [[#^d1-q-9\|Q9]] (looks like 1.2, tests 5.6 provenance), [[#^d1-q-22\|Q22]] (looks like 1.5, tests data normalization pattern)
+- **Common-anti-pattern questions:** [[#^d1-q-1\|Q1]] (text parsing), [[#^d1-q-7\|Q7]] (chain topology), [[#^d1-q-10\|Q10]] (missing Agent tool), [[#^d1-q-15\|Q15]]-[[#^d1-q-16\|Q16]] (prompts for hard rules)
 
 ---
 
-*Domain 1 weight: **27%** of the exam. Companion roadmap: [[cca_domain1_roadmap.md]]. Companion exercises: [[cca_domain1_exercises.md]].*
+*Domain 1 weight: **27%** of the exam. Companion roadmap: [[cca_domain1_roadmap]]. Companion exercises: [[cca_domain1_exercises]].*

@@ -31,11 +31,11 @@ difficulty: harder-than-real-exam
 
 | Task | Questions | Focus |
 |------|-----------|-------|
-| 2.1 | Q1-Q7 | Tool descriptions, differentiation, splitting generic tools |
-| 2.2 | Q8-Q13 | Structured errors, `is_error`, error category metadata |
-| 2.3 | Q14-Q19 | `tool_choice`, distribution, parallel tool use |
-| 2.4 | Q20-Q25 | MCP server scoping, credentials, community vs custom |
-| 2.5 | Q26-Q30 | Built-in tools: Grep, Glob, Read, Write, Edit, Bash |
+| 2.1 | [[#^d2-q-1\|Q1]]-[[#^d2-q-7\|Q7]] | Tool descriptions, differentiation, splitting generic tools |
+| 2.2 | [[#^d2-q-8\|Q8]]-[[#^d2-q-13\|Q13]] | Structured errors, `is_error`, error category metadata |
+| 2.3 | [[#^d2-q-14\|Q14]]-[[#^d2-q-19\|Q19]] | `tool_choice`, distribution, parallel tool use |
+| 2.4 | [[#^d2-q-20\|Q20]]-[[#^d2-q-25\|Q25]] | MCP server scoping, credentials, community vs custom |
+| 2.5 | [[#^d2-q-26\|Q26]]-[[#^d2-q-30\|Q30]] | Built-in tools: Grep, Glob, Read, Write, Edit, Bash |
 
 ---
 
@@ -645,19 +645,19 @@ D. Bash with `cat README.md`.
 
 | Q | A | Q | A | Q | A | Q | A | Q | A | Q | A |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | C | 6 | A | 11 | D | 16 | B | 21 | C | 26 | A |
-| 2 | A | 7 | D | 12 | B | 17 | C | 22 | A | 27 | D |
-| 3 | D | 8 | B | 13 | C | 18 | A | 23 | D | 28 | A |
-| 4 | B | 9 | C | 14 | A | 19 | D | 24 | B | 29 | C |
-| 5 | C | 10 | A | 15 | D | 20 | B | 25 | C | 30 | A |
+| [[#^d2-q-1\|1]] | C | [[#^d2-q-6\|6]] | A | [[#^d2-q-11\|11]] | D | [[#^d2-q-16\|16]] | B | [[#^d2-q-21\|21]] | C | [[#^d2-q-26\|26]] | A |
+| [[#^d2-q-2\|2]] | A | [[#^d2-q-7\|7]] | D | [[#^d2-q-12\|12]] | B | [[#^d2-q-17\|17]] | C | [[#^d2-q-22\|22]] | A | [[#^d2-q-27\|27]] | D |
+| [[#^d2-q-3\|3]] | D | [[#^d2-q-8\|8]] | B | [[#^d2-q-13\|13]] | C | [[#^d2-q-18\|18]] | A | [[#^d2-q-23\|23]] | D | [[#^d2-q-28\|28]] | A |
+| [[#^d2-q-4\|4]] | B | [[#^d2-q-9\|9]] | C | [[#^d2-q-14\|14]] | A | [[#^d2-q-19\|19]] | D | [[#^d2-q-24\|24]] | B | [[#^d2-q-29\|29]] | C |
+| [[#^d2-q-5\|5]] | C | [[#^d2-q-10\|10]] | A | [[#^d2-q-15\|15]] | D | [[#^d2-q-20\|20]] | B | [[#^d2-q-25\|25]] | C | [[#^d2-q-30\|30]] | A |
 
 ## Stats summary
 
 - **Answer distribution:** A=9 (30%) · B=6 (20%) · C=8 (27%) · D=7 (23%)
-- **Hardest questions** (subtle distinctions, two-look-right options): Q4 (precondition wording), Q9 (business vs permission), Q16 (extended thinking + tool_choice), Q23 (community + custom), Q24 (tool vs resource at protocol level)
-- **Trap questions:** Q1 (looks like it's about routing classifiers, tests description quality), Q3 (looks like it's about parameters, tests splitting)
-- **Common-anti-pattern questions:** Q2 (consolidating instead of splitting), Q8 (raising exceptions), Q18 (separate user messages breaking parallel tool use)
+- **Hardest questions** (subtle distinctions, two-look-right options): [[#^d2-q-4\|Q4]] (precondition wording), [[#^d2-q-9\|Q9]] (business vs permission), [[#^d2-q-16\|Q16]] (extended thinking + tool_choice), [[#^d2-q-23\|Q23]] (community + custom), [[#^d2-q-24\|Q24]] (tool vs resource at protocol level)
+- **Trap questions:** [[#^d2-q-1\|Q1]] (looks like it's about routing classifiers, tests description quality), [[#^d2-q-3\|Q3]] (looks like it's about parameters, tests splitting)
+- **Common-anti-pattern questions:** [[#^d2-q-2\|Q2]] (consolidating instead of splitting), [[#^d2-q-8\|Q8]] (raising exceptions), [[#^d2-q-18\|Q18]] (separate user messages breaking parallel tool use)
 
 ---
 
-*Domain 2 weight: **18%** of the exam. Companion roadmap: [[cca_domain2_roadmap.md]]. Companion exercises: [[cca_domain2_exercises.md]].*
+*Domain 2 weight: **18%** of the exam. Companion roadmap: [[cca_domain2_roadmap]]. Companion exercises: [[cca_domain2_exercises]].*

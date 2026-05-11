@@ -31,12 +31,12 @@ difficulty: harder-than-real-exam
 
 | Task | Questions | Focus |
 |------|-----------|-------|
-| 4.1 | Q1-Q4 | Explicit criteria, clear and direct prompts |
-| 4.2 | Q5-Q8 | Multi-shot prompting, XML-wrapped examples |
-| 4.3 | Q9-Q15 | Structured output via `tool_use` / `output_config.format` |
-| 4.4 | Q16-Q20 | Validation-retry loops with limits and fallbacks |
-| 4.5 | Q21-Q26 | Message Batches API: cost, latency, capabilities |
-| 4.6 | Q27-Q30 | Multi-instance independent review |
+| 4.1 | [[#^d4-q-1\|Q1]]-[[#^d4-q-4\|Q4]] | Explicit criteria, clear and direct prompts |
+| 4.2 | [[#^d4-q-5\|Q5]]-[[#^d4-q-8\|Q8]] | Multi-shot prompting, XML-wrapped examples |
+| 4.3 | [[#^d4-q-9\|Q9]]-[[#^d4-q-15\|Q15]] | Structured output via `tool_use` / `output_config.format` |
+| 4.4 | [[#^d4-q-16\|Q16]]-[[#^d4-q-20\|Q20]] | Validation-retry loops with limits and fallbacks |
+| 4.5 | [[#^d4-q-21\|Q21]]-[[#^d4-q-26\|Q26]] | Message Batches API: cost, latency, capabilities |
+| 4.6 | [[#^d4-q-27\|Q27]]-[[#^d4-q-30\|Q30]] | Multi-instance independent review |
 
 ---
 
@@ -259,7 +259,7 @@ D. The tool's description must be 200+ characters long.
 
 #### Question 12
 
-The native structured outputs feature uses which beta header? ^d4-q-12
+Structured outputs reached general availability and beta headers are no longer required for new code. The `output_format` parameter has moved to `output_config.format`. Before this migration, which beta header did the feature use (and is still honored for backward compatibility during the transition period)? ^d4-q-12
 
 A. `messages-2024-12-01`
 B. `json-mode-stable`
@@ -269,9 +269,9 @@ D. `structured-outputs-2025-11-13`
 > [!success]- Reveal answer
 > **Correct: D**
 >
-> Documented beta header for the native structured outputs feature.
+> Per the official structured outputs docs: "The old beta header (`structured-outputs-2025-11-13`) and `output_format` parameter will continue working for a transition period." For new code: omit the beta header and use `output_config.format` directly.
 >
-> **Why others are wrong:** A, B, and C are fabricated. Memorize the exact beta header string.
+> **Why others are wrong:** A, B, and C are fabricated header strings. The exam may still test this header verbatim because legacy code uses it.
 
 #### Question 13
 
@@ -500,19 +500,22 @@ D. `custom_id` — team-set, 1-64 chars, regex `^[a-zA-Z0-9_-]{1,64}$`. Results 
 
 #### Question 25
 
-Can a Batches API request include multi-turn tool calling? ^d4-q-25
+A developer wants to use the Batches API for a workflow where each ticket requires the model to call a `lookup_customer` tool, examine the result, then call either `process_refund` or `escalate`. Can they implement this entire flow within a single batch entry? ^d4-q-25
 
-A. No. Batches API supports single-turn only. Each request is one model call with optional tool definitions, but no multi-turn tool execution within a single batch entry.
-B. Yes, up to 5 turns per request.
-C. Yes, with a `multi_turn: true` flag set on the request.
-D. Yes, but only when the batch contains fewer than 1,000 requests.
+A. No. Each batch entry is **one model invocation** — there's no agentic tool-execution loop where the API runs the tool and returns the model's next turn. To implement the flow with batches, either (a) submit multiple batches in stages with the application managing the loop between them, or (b) use the synchronous Messages API where iterative tool execution is straightforward. Note: multi-turn *conversation history* in the `messages` array IS supported as input — what's not supported is the API running an execution loop within one batch entry.
+B. Yes, set `multi_turn: true` in each batch request to enable iterative tool execution.
+C. Yes, batches automatically loop until the model returns `stop_reason: "end_turn"`.
+D. Yes, but only when each tool's execution completes in under 5 seconds.
 
 > [!success]- Reveal answer
 > **Correct: A**
 >
-> Documented constraint: single-turn only. If the team needs multi-turn tool use, they need the synchronous Messages API.
+> The Batches docs list "Multi-turn conversations" as a supported input (you can include a multi-turn `messages` array), and tool use definitions can be included. What's not supported is the **execution loop**: the API doesn't run your tools and feed results back to get the model's next turn within a single batch entry. Each batch entry = one model invocation.
 >
-> **Why others are wrong:** B, C, D fabricated.
+> **Why others are wrong:**
+> - B: `multi_turn: true` is fabricated.
+> - C: The batch returns whatever the first invocation produces (text or tool calls). It does not run an iterative loop.
+> - D: No tool-execution-time threshold makes the API run a loop.
 
 #### Question 26
 
@@ -614,19 +617,19 @@ D. Yes — but only when N=2 (the API limits per-document submissions to 2).
 
 | Q | A | Q | A | Q | A | Q | A | Q | A | Q | A |
 |---|---|---|---|---|---|---|---|---|---|---|---|
-| 1 | A | 6 | C | 11 | B | 16 | D | 21 | A | 26 | C |
-| 2 | C | 7 | B | 12 | D | 17 | A | 22 | C | 27 | B |
-| 3 | B | 8 | D | 13 | A | 18 | C | 23 | B | 28 | D |
-| 4 | D | 9 | A | 14 | C | 19 | B | 24 | D | 29 | A |
-| 5 | A | 10 | C | 15 | B | 20 | D | 25 | A | 30 | C |
+| [[#^d4-q-1\|1]] | A | [[#^d4-q-6\|6]] | C | [[#^d4-q-11\|11]] | B | [[#^d4-q-16\|16]] | D | [[#^d4-q-21\|21]] | A | [[#^d4-q-26\|26]] | C |
+| [[#^d4-q-2\|2]] | C | [[#^d4-q-7\|7]] | B | [[#^d4-q-12\|12]] | D | [[#^d4-q-17\|17]] | A | [[#^d4-q-22\|22]] | C | [[#^d4-q-27\|27]] | B |
+| [[#^d4-q-3\|3]] | B | [[#^d4-q-8\|8]] | D | [[#^d4-q-13\|13]] | A | [[#^d4-q-18\|18]] | C | [[#^d4-q-23\|23]] | B | [[#^d4-q-28\|28]] | D |
+| [[#^d4-q-4\|4]] | D | [[#^d4-q-9\|9]] | A | [[#^d4-q-14\|14]] | C | [[#^d4-q-19\|19]] | B | [[#^d4-q-24\|24]] | D | [[#^d4-q-29\|29]] | A |
+| [[#^d4-q-5\|5]] | A | [[#^d4-q-10\|10]] | C | [[#^d4-q-15\|15]] | B | [[#^d4-q-20\|20]] | D | [[#^d4-q-25\|25]] | A | [[#^d4-q-30\|30]] | C |
 
 ## Stats summary
 
 - **Answer distribution:** A=8 (27%) · B=7 (23%) · C=8 (27%) · D=7 (23%)
-- **Hardest questions** (subtle distinctions, two-look-right options): Q3 (vagueness comparison), Q4 (prompt vs schema), Q14 (required + nullable vs optional), Q16 (when retry helps), Q23 (Batches misapplication), Q30 (Batches + multi-instance review composition)
-- **Trap questions:** Q23 (looks like a cost-saving win, tests SLA trap), Q27 (looks reasonable to self-review but fails on independence), Q28 (anchoring rationale, not just "no")
-- **Verbatim-fact traps:** Q5 (3-5 examples), Q12 (beta header `structured-outputs-2025-11-13`), Q21 (50%), Q22 (24 hours), Q24 (`custom_id` constraints), Q26 (29 days)
+- **Hardest questions** (subtle distinctions, two-look-right options): [[#^d4-q-3\|Q3]] (vagueness comparison), [[#^d4-q-4\|Q4]] (prompt vs schema), [[#^d4-q-14\|Q14]] (required + nullable vs optional), [[#^d4-q-16\|Q16]] (when retry helps), [[#^d4-q-23\|Q23]] (Batches misapplication), [[#^d4-q-30\|Q30]] (Batches + multi-instance review composition)
+- **Trap questions:** [[#^d4-q-23\|Q23]] (looks like a cost-saving win, tests SLA trap), [[#^d4-q-27\|Q27]] (looks reasonable to self-review but fails on independence), [[#^d4-q-28\|Q28]] (anchoring rationale, not just "no")
+- **Verbatim-fact traps:** [[#^d4-q-5\|Q5]] (3-5 examples), [[#^d4-q-12\|Q12]] (beta header `structured-outputs-2025-11-13`), [[#^d4-q-21\|Q21]] (50%), [[#^d4-q-22\|Q22]] (24 hours), [[#^d4-q-24\|Q24]] (`custom_id` constraints), [[#^d4-q-26\|Q26]] (29 days)
 
 ---
 
-*Domain 4 weight: **20%** of the exam. Companion roadmap: [[cca_domain4_roadmap.md]]. Companion exercises: [[cca_domain4_exercises.md]].*
+*Domain 4 weight: **20%** of the exam. Companion roadmap: [[cca_domain4_roadmap]]. Companion exercises: [[cca_domain4_exercises]].*
