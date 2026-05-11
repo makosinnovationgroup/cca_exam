@@ -28,9 +28,9 @@ Four exercises that build practical fluency in the Agent SDK patterns most heavi
 
 ## Prerequisites
 
-- [ ] **Python 3.10+** installed (`python3 --version` should show 3.10 or higher)
-- [ ] **Anthropic API key** in env: `export ANTHROPIC_API_KEY=sk-ant-...` — or active Claude Code subscription
-- [ ] A working directory: `mkdir -p ~/cca-prep && cd ~/cca-prep`
+- [x] **Python 3.10+** installed (`python3 --version` should show 3.10 or higher)
+- [x] **Anthropic API key** in env: `export ANTHROPIC_API_KEY=sk-ant-...` — or active Claude Code subscription
+- [x] A working directory: `mkdir -p ~/cca-prep && cd ~/cca-prep`
 - [ ] Basic Python comfort (no async wizardry required; the SDK uses async but the patterns are simple)
 
 ---
@@ -43,12 +43,12 @@ Get the SDK installed and confirm an agent loop runs end-to-end. This is the fou
 
 ### Steps
 
-- [ ] Install the SDK:
+- [x] Install the SDK:
   ```bash
   pip install claude-agent-sdk
   ```
 
-- [ ] Create `hello_agent.py`:
+- [x] Create `hello_agent.py`:
   ```python
   import asyncio
   from claude_agent_sdk import query, ClaudeAgentOptions
@@ -65,12 +65,12 @@ Get the SDK installed and confirm an agent loop runs end-to-end. This is the fou
   asyncio.run(main())
   ```
 
-- [ ] Run it:
+- [x] Run it:
   ```bash
   python hello_agent.py
   ```
 
-- [ ] Verify you see assistant messages streaming back, ending with a result message that includes `stop_reason: "end_turn"`.
+- [x] Verify you see assistant messages streaming back, ending with a result message that includes `stop_reason: "end_turn"`.
 
 ### What to notice
 
