@@ -30,7 +30,7 @@ Four exercises that build practical fluency in the Claude Agent SDK patterns mos
 
 ## Prerequisites
 
-- [ ] **Node.js 20+** installed (`node --version` — you have 20.18.0, you're set)
+- [ ] **Node.js 20+** installed — verify with `node --version`
 - [ ] **Anthropic API key** in env: `export ANTHROPIC_API_KEY=sk-ant-...` — or active Claude Code subscription
 - [ ] A working directory: `mkdir -p ~/cca-prep && cd ~/cca-prep`
 - [ ] Basic TypeScript comfort (no advanced generics required; the SDK uses async iteration but the patterns are simple)
@@ -45,20 +45,20 @@ Get the SDK installed in a TypeScript project and confirm an agent loop runs end
 
 ### Steps
 
-- [x] Initialize the project:
+- [ ] Initialize the project:
   ```bash
   cd ~/cca-prep
   npm init -y
   npm pkg set type="module"
   ```
 
-- [x] Install the SDK and a TS runner. `tsx` lets you run `.ts` files directly without a compile step.
+- [ ] Install the SDK and a TS runner. `tsx` lets you run `.ts` files directly without a compile step.
   ```bash
   npm install @anthropic-ai/claude-agent-sdk zod
   npm install -D tsx typescript @types/node
   ```
 
-- [x] Create a minimal `tsconfig.json`:
+- [ ] Create a minimal `tsconfig.json`:
   ```json
   {
     "compilerOptions": {
@@ -74,7 +74,7 @@ Get the SDK installed in a TypeScript project and confirm an agent loop runs end
   }
   ```
 
-- [x] Create `hello_agent.ts`:
+- [ ] Create `hello_agent.ts`:
   ```typescript
   import { query } from "@anthropic-ai/claude-agent-sdk";
 
@@ -88,12 +88,12 @@ Get the SDK installed in a TypeScript project and confirm an agent loop runs end
   }
   ```
 
-- [x] Run it:
+- [ ] Run it:
   ```bash
   npx tsx hello_agent.ts
   ```
 
-- [x] Verify you see message objects streaming back, ending with a result message that includes `stop_reason: "end_turn"`.
+- [ ] Verify you see message objects streaming back, ending with a result message that includes `stop_reason: "end_turn"`.
 
 ### What to notice
 
@@ -109,7 +109,7 @@ The `for await...of` loop above is the entire agent loop. Internally the SDK is 
 
 ### Goal
 
-Build a customer support agent with four MCP tools and wire in a `PreToolUse` hook that blocks any `process_refund` above $500. This drills Task 1.4 (your weak spot) and Tasks 1.5, 2.1, 2.2.
+Build a customer support agent with four MCP tools and wire in a `PreToolUse` hook that blocks any `process_refund` above $500. Reinforces Tasks 1.4, 1.5, 2.1, and 2.2.
 
 ### Step 1 — Define the MCP tools
 
@@ -337,7 +337,7 @@ await runScenario(
 ### Exam mapping
 
 - **Task 1.1** — managed agentic loop with `stop_reason`-driven flow
-- **Task 1.4** ⚠️ — programmatic prerequisite via hook (your weak spot)
+- **Task 1.4** — programmatic prerequisite enforcement via hook
 - **Task 1.5** — `PreToolUse` hook with `permissionDecision: "deny"` redirecting to alternative workflow
 - **Task 2.1** — differentiated tool descriptions to prevent selection confusion
 - **Task 2.2** — structured error responses with `errorCategory` and `isRetryable`
@@ -351,7 +351,7 @@ await runScenario(
 
 ### Goal
 
-Build a research coordinator that spawns two specialized subagents in parallel. Measure the latency improvement vs serial. This drills Tasks 1.2, 1.3, 5.3, and 5.6 (provenance — your weak spot).
+Build a research coordinator that spawns two specialized subagents in parallel. Measure the latency improvement vs serial. Reinforces Tasks 1.2, 1.3, 5.3, and 5.6 (provenance preservation).
 
 ### Step 1 — Define the subagents
 
@@ -478,7 +478,7 @@ console.log(`Speedup:  ${(serialTime / parallelTime).toFixed(1)}x`);
 - **Task 1.2** — hub-and-spoke (coordinator → subagents → coordinator synthesis), coordinator-driven decomposition
 - **Task 1.3** — `Task` in `allowedTools`, explicit context (we passed the research question in the user prompt, not assumed inheritance), **parallel spawning by emitting multiple Task calls in one response**
 - **Task 2.3** — scoped tool access per subagent role
-- **Task 5.6** ⚠️ — structured claim-source mappings preserved through synthesis (your weak spot — feel it work and feel it break)
+- **Task 5.6** — structured claim-source mappings preserved through synthesis (feel it work and feel it break)
 
 > [!tip] Why doing this beats reading about it
 > Until you've watched two `Task` tool calls fire in a single response and seen latency halve, the parallel-spawn pattern is abstract. After you've seen it once, Q10 and Q34 are obvious. Same for provenance — once you've watched a synthesis agent drop attribution because the coordinator's instructions were sloppy, Q11/Q32 land instantly.
