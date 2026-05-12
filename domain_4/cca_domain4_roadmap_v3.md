@@ -145,6 +145,20 @@ Read the **entire** page. The exam tests verbatim facts about cost, timing, capa
 - Anything urgent / interactive
 - Streaming UI responses
 
+**Memorize cold — Batches vs synchronous decision rule (asked directly on sample Q11):**
+
+| Use Batches when... | Use synchronous when... |
+|---|---|
+| Overnight report generation | Pre-merge CI checks (blocks PR) |
+| Weekly compliance audit | Customer-facing chat / support |
+| Nightly test generation | Any workflow gated by a human |
+| Bulk extraction / backfill | Real-time UI / dashboard updates |
+| Cost-sensitive non-blocking work | Anything with a sub-hour latency need |
+
+**The "blocking-or-latency" decision rule:** Ask "will a human or downstream system be waiting on this result within the next hour?" If **yes → synchronous** (Batches SLA can be 24 hours; you cannot block a developer's PR or a customer's chat that long). If **no → Batches** (50% savings, no real cost beyond the wait).
+
+Categories of legitimately-non-blocking work the exam treats as Batches-appropriate: overnight reports, weekly audits, nightly test generation, bulk evaluations, content moderation backlogs.
+
 **The chunking pattern:**
 - Submit batch of 10,000; 3% fail (300 docs)
 - Re-submit just those 300, possibly chunked further to isolate problematic inputs
@@ -167,6 +181,17 @@ The foundational Task 4.1 page.
 - **State explicit criteria** for success
 - **Use ordered lists, bullets, headings** to structure complex prompts
 - **"The golden rule":** Show your prompt to a colleague with minimal context. If they're confused, Claude will be too.
+
+**Memorize cold — handling high-false-positive categories (developer-trust restoration):**
+
+When a multi-category agent has some categories generating false positives at a rate that erodes user trust, the documented pattern is **surgical, not blanket**:
+
+- **DO:** Temporarily disable the high-false-positive categories while their prompts are being improved. Keep the accurate categories running so trust in working categories is preserved.
+- **DON'T:** Apply a global "be more conservative" or "only report high-confidence findings" instruction — these degrade the categories that were working without fixing the broken ones.
+- **DON'T:** Lower confidence thresholds globally — same problem; you penalize good categories to dampen bad ones.
+- **DON'T:** Add human pre-review across all categories — masks the underlying issue and doesn't scale.
+
+Why this matters for the exam: distractors often offer "global" or "blanket" fixes (more conservative prompts, lower thresholds) that look defensible. The correct answer isolates the bad categories, leaves the good ones alone, and fixes the bad ones offline.
 
 ### Prompt engineering — Use examples (multishot prompting) · ~30 min
 
@@ -399,6 +424,36 @@ Independent quality check:
 Strict format compliance scenario:
 - Distractor: "Add more few-shot examples"
 - **Correct:** schema (tool_use or output_config.format). Examples shape style; schema enforces structure.
+
+### Distractor pattern 8: Single-pass review of many files
+
+Scenario: A PR touches 10+ files; a single-instance, single-pass review missed cross-file bugs (API contract mismatches, broken data flow, race conditions). Distractors offer "longer prompt with stricter checklist," "more checks per file," or "larger context window."
+
+**Correct architecture: two-stage multi-pass review.**
+1. **Per-file local passes** — one Claude instance per file with isolated context. Each instance focuses on local issues (syntax, logic, style, single-file correctness). Independence prevents attention dilution; isolated contexts prevent cross-contamination.
+2. **Cross-file integration pass** — one instance reviewing inter-file concerns (API contracts, data flow, dependencies, race conditions). Input: the file changes PLUS the structured summaries from the per-file passes. The integration pass operates on a reduced surface (summaries, not full code) so cross-file reasoning has room to work.
+
+Why single-pass fails for many files: attention dilutes as context fills. By file 8 of 14, the model's reasoning quality on file 8 is materially worse than on file 1, even though the file is identical. The per-file split fixes this; the integration pass recovers cross-file analysis that per-file isolation would lose.
+
+Sample Q12 in the official exam guide tests this exact pattern with a "14 files in the stock tracking module" scenario.
+
+### Distractor pattern 9: Instrumenting false-positive analysis
+
+Scenario: Developers dismiss 40% of agent-flagged findings, but logs only contain the finding text. There's no way to know which prompt patterns or code constructs are triggering the false positives. Distractors offer "improve the prompt," "lower thresholds," or "have humans pre-review."
+
+**Correct: structural instrumentation with `detected_pattern` fields.**
+
+Add a `detected_pattern` field (a categorical enum naming which rule/construct triggered the finding) to every structured finding the agent emits. Example: `detected_pattern: "implicit_type_coercion"` or `detected_pattern: "missing_null_check_on_dict_access"`. Now when developers dismiss findings, you can:
+- Group dismissals by `detected_pattern` to find which patterns drive false positives
+- Disable or rework the prompts associated with high-FP patterns (see Distractor pattern in "Be clear and direct" section)
+- Calibrate threshold by category, not globally
+
+Related schema-level instrumentation for **self-correcting validation**:
+- Extract `calculated_total` alongside `stated_total` from invoices/receipts → flag discrepancies without a second LLM pass
+- Extract a `conflict_detected` boolean when source documents have inconsistent values → coordinator decides reconciliation policy
+- These patterns turn validation into a schema obligation, not a probabilistic prompt instruction
+
+Distractors miss this because they reach for *prompt* changes when the problem is *measurement* — you can't fix what you can't categorize.
 
 ### Subtle distinction 1: Strict mode vs schema validation
 

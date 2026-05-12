@@ -46,7 +46,7 @@ The exam rewards minimum-effort root-cause fixes: rewriting tool descriptions ov
 
 ### Tool use overview · ~20 min
 
-- [ ] **Read:** `docs.claude.com/en/agents-and-tools/tool-use/overview`
+- [x] **Read:** `docs.claude.com/en/agents-and-tools/tool-use/overview`
 
 Top of the tool-use docs. Establishes vocabulary: tool, tool definition, tool call, tool result, `tool_choice`, `stop_reason`. Read first; everything else builds on this.
 
@@ -58,25 +58,26 @@ Top of the tool-use docs. Establishes vocabulary: tool, tool definition, tool ca
 
 ### How tool use works · ~30 min
 
-- [ ] **Read:** `docs.claude.com/en/agents-and-tools/tool-use/how-tool-use-works`
+- [x] **Read:** `docs.claude.com/en/agents-and-tools/tool-use/how-tool-use-works`
 
-Protocol mechanics. The request-response shape. `tool_choice` options and what each guarantees.
+The agentic tool-use loop, the client-vs-server tool distinction, and how `tool_use` / `tool_result` blocks flow through the conversation. Foundational for everything else in Domain 2.
 
-**Memorize cold (`tool_choice` is heavily tested):**
-- `tool_choice: "auto"` (default) — model decides whether to call a tool or respond in text
-- `tool_choice: "any"` — model **must** call some tool, picks which one
-- `tool_choice: "tool"` with `name: "X"` — model **must** call the named tool
-- `tool_choice: "none"` — disables tool calling
-- `disable_parallel_tool_use: true` — restricts to one tool per turn (combined with `auto`, `any`, or `tool`)
+**Memorize cold (the agentic loop):**
+- **4-step pattern:** (1) send a request with `tools` defined → (2) Claude responds with `stop_reason: "tool_use"` and one or more `tool_use` blocks → (3) your code executes the tool and constructs a matching `tool_result` block → (4) send the result back; Claude continues the loop or terminates with `stop_reason: "end_turn"`
+- The model decides *whether* and *when* to call a tool based on the `tools` you provide; your code decides *how* to execute them
+- `tool_use` block fields: `id`, `name`, `input`
+- `tool_result` block fields: `tool_use_id` (matches the `id` from the corresponding `tool_use`), `content`, optional `is_error`
+- `is_error: true` on a `tool_result` signals failure to Claude — never raise an exception (crashes the loop); always return a structured failure
 
-**Memorize the `tool_choice` interaction with extended thinking:**
-- With extended thinking: only `tool_choice: "auto"` and `tool_choice: "none"` are supported
-- `tool_choice: "any"` and `tool_choice: {"type": "tool"}` produce errors with extended thinking
-- Why: `any` and forced tool_choice prefill the assistant message, which conflicts with thinking blocks
+**Memorize cold (client tools vs server tools):**
+- **Client tools** — custom tools you define. Execute on **your** infrastructure. The API returns `tool_use` blocks; your code runs the tool and posts back `tool_result`.
+- **Server tools** — Anthropic-hosted built-ins (e.g., `web_search`, `web_fetch`, `code_execution`, `bash`, `text_editor`, `computer_use`, `memory`). Execute on **Anthropic's** infrastructure. The API runs them and returns results inline; you don't host them.
+- Server tools may trigger `stop_reason: "pause_turn"` for long-running operations — yield back to the client so the conversation can be resumed
+- This distinction matters for: what you implement, where execution and errors actually happen, and how `pause_turn` fits the loop
 
 ### Tutorial: Build a tool-using agent · ~30 min
 
-- [ ] **Read:** `docs.claude.com/en/agents-and-tools/tool-use/build-a-tool-using-agent`
+- [x] **Read:** `docs.claude.com/en/agents-and-tools/tool-use/build-a-tool-using-agent`
 
 Five-ring tutorial from single tool call to production-ready agentic loop. Builds the agentic loop by hand first, then collapses to the Tool Runner SDK. **Critical pattern visibility:** `tool_use` blocks, `tool_result` blocks, `tool_use_id` matching, `stop_reason` checking, `is_error` signaling.
 
@@ -88,7 +89,7 @@ Five-ring tutorial from single tool call to production-ready agentic loop. Build
 
 ### Define tools · ~30 min
 
-- [ ] **Read:** `docs.claude.com/en/agents-and-tools/tool-use/implement-tool-use`
+- [x] **Read:** `docs.claude.com/en/agents-and-tools/tool-use/define-tools`
 
 Tool definitions, JSON schemas, input/output, the canonical example pattern.
 
@@ -101,9 +102,34 @@ Tool definitions, JSON schemas, input/output, the canonical example pattern.
 - Include example queries and edge cases
 - Splitting a generic tool into purpose-specific tools (e.g., `analyze_document` → `extract_data_points`, `summarize_content`, `verify_claim_against_source`) is the documented fix for inconsistent outputs
 
+### Tool choice and behavior control · ~20 min
+
+- [x] **Read:** `docs.claude.com/en/agents-and-tools/tool-use/define-tools` (Controlling Claude's output / Forcing tool use section)
+
+How to control whether Claude calls a tool and which one. **Heavily tested in Task 2.3.**
+
+**Memorize cold (`tool_choice` options):**
+- `tool_choice: {"type": "auto"}` (default) — model decides whether to call a tool or respond in text
+- `tool_choice: {"type": "any"}` — model **must** call some tool, picks which one
+- `tool_choice: {"type": "tool", "name": "X"}` — model **must** call the named tool
+- `tool_choice: {"type": "none"}` — disables tool calling entirely
+- `disable_parallel_tool_use: true` — restricts to one tool per turn; combinable with `auto` (zero or one), `any` (exactly one), or forced (exactly the named tool)
+
+**Memorize cold (`tool_choice` interaction with extended thinking):**
+- With extended thinking enabled: **only** `tool_choice: {"type": "auto"}` and `tool_choice: {"type": "none"}` are supported
+- `tool_choice: {"type": "any"}` and forced (`{"type": "tool", "name": "..."}`) produce errors with extended thinking
+- Why: `any` and forced tool_choice prefill the assistant message, which conflicts with the thinking block's prefill
+- Practical implication: if you need structured output + thinking, use `auto` with strong prompting rather than forcing — accept that the model may produce text instead of calling the tool
+
+**Memorize cold (prefill side-effect):**
+- When `tool_choice` is `any` or forced, the API prefills the assistant message to force tool use
+- Side effect: the model will **not** produce natural-language reasoning before `tool_use` blocks, even if your prompt asks for it
+- Use `auto` if you need the model to explain itself in text before deciding whether to call a tool
+- Changing `tool_choice` between requests **invalidates cached message blocks** (tool definitions and system prompts remain cached)
+
 ### Handle tool calls (Implement tool use) · ~30 min
 
-- [ ] **Read:** `docs.claude.com/en/agents-and-tools/tool-use/implement-tool-use` (Handle tool results section)
+- [x] **Read:** `docs.claude.com/en/agents-and-tools/tool-use/handle-tool-calls`
 
 Where loop control lives on the API side. How tool results flow back into context. Modifying tool results to add `cache_control`.
 
@@ -116,7 +142,7 @@ Where loop control lives on the API side. How tool results flow back into contex
 
 ### Parallel tool use · ~25 min
 
-- [ ] **Read:** `docs.claude.com/en/agents-and-tools/tool-use/parallel-tool-use`
+- [x] **Read:** `docs.claude.com/en/agents-and-tools/tool-use/parallel-tool-use`
 
 The protocol-level mechanics of parallel tool calls. Directly relevant to Domain 1.3 (parallel subagents use the same mechanism).
 
@@ -168,7 +194,7 @@ The MCP integration page on the Anthropic side. Covers MCP servers, tools, **res
 
 ### MCP server configuration · ~30 min
 
-- [ ] **Read:** `docs.claude.com/en/api/agent-sdk/mcp`
+- [ ] **Read:** `docs.claude.com/en/agent-sdk/mcp`
 - [ ] **Read:** `code.claude.com/docs/en/mcp` (Claude Code MCP page)
 
 Server scoping — the heaviest-tested fact in this domain.

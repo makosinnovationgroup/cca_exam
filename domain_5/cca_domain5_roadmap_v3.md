@@ -86,6 +86,20 @@ Token budgets, how context fills up, what gets prioritized when context approach
 - For multi-session agents: design state artifacts so context recovery is fast on new session start (memory tool's multi-session pattern)
 - Extended thinking + tool use has special token-handling: thinking blocks accompanying tool calls must be returned unmodified with the tool result
 
+**Memorize cold — the "lost in the middle" effect and position-aware input ordering (Task 5.1):**
+
+Models reliably process information at the **beginning** and **end** of long inputs, but may omit or under-weight content from **middle sections**. This is the "lost in the middle" effect documented in long-context research and tested by the exam.
+
+**Mitigations the exam tests:**
+- **Front-load critical findings:** When aggregating multiple sources or subagent results, place the most important conclusions / key findings summary at the **beginning** of the aggregated input — not buried in the middle.
+- **Use explicit section headers:** Organize long inputs with clear section headers (e.g., `## Finding 1: ...`, `## Finding 2: ...`) so the model can navigate structurally even if attention dilutes in the middle.
+- **End with restated priorities:** Re-state the most critical decision criteria or task instructions at the **end** of the input, so they're freshest in the model's working memory when it begins responding.
+- **Aggregation pattern:** `[Top-level summary at beginning] → [Detailed sections in middle with explicit headers] → [Restated task instructions at end]`.
+
+**Anti-pattern (distractor):** "Put everything in chronological order" — chronological order doesn't protect against the position effect; importance order does.
+
+**Companion mitigation:** trimming verbose tool outputs before they accumulate in context (keep only return-relevant fields). Reduces the "long middle" that's most at risk of being lost.
+
 ### Compaction · ~45 min
 
 - [ ] **Read:** `docs.claude.com/en/docs/build-with-claude/compaction`
@@ -175,6 +189,17 @@ Same page covered in Domain 3, but worth re-reading from Domain 5 lens — what 
 - Re-read on demand without holding full content in active context
 - Subagents (Explore, custom) provide context isolation — verbose exploration stays inside subagent context, only summary returns
 
+**Memorize cold — signs of context degradation in extended sessions (Task 5.4 diagnostic):**
+
+When a long exploration session is failing, the model exhibits specific symptoms that the exam tests as diagnostic indicators:
+- **Inconsistent answers** to the same question asked at different points in the session
+- **References to "typical patterns"** instead of citing the specific classes, functions, or files actually discovered earlier in the session (a tell that context-anchored detail has been lost)
+- **Generic best-practices answers** replacing project-specific guidance the model had earlier
+- **Refusing to commit** to specifics ("it depends on the implementation") when it had been specific before
+- **Forgetting decisions** made earlier in the session — re-suggesting an approach already rejected
+
+**The fix is architectural, not prompt-level:** scratchpads (lossless external state), subagent isolation for verbose exploration, summarize-then-spawn pattern (write key findings before launching the next phase). Don't try to compact your way out — compaction is summarization, and what's been lost is the *specific detail* that summarization further degrades.
+
 ---
 
 ## Skim · ~15 min
@@ -257,6 +282,21 @@ When/how to escalate to human:
 - "Use sentiment subagent"
 - **Correct:** escalate on **explicit request**. Sentiment is unreliable (false positives on frustrated venting, false negatives on calm requests).
 
+**Memorize cold — the documented escalation trigger taxonomy (Task 5.2):**
+
+The exam tests THREE legitimate escalation triggers — no others count:
+1. **Customer explicitly requests a human.** Direct request. Always honor; don't second-guess based on whether the agent thinks it could resolve it.
+2. **Policy exception or policy gap.** The customer's request is one the policy doesn't address (e.g., competitor price-matching when the policy only addresses own-site adjustments). Not just complex — policy must actually be silent or ambiguous on the specific case.
+3. **Inability to make meaningful progress.** Multiple turns of dead-end retry; not just one tool failure. The agent has tried the documented recovery paths and the case isn't moving forward.
+
+**Anti-pattern triggers** (all are distractors):
+- Customer is *frustrated* but hasn't asked for a human → not a trigger (helping them is usually what they want)
+- Case is *complex* but agent has a clear path → not a trigger (complexity ≠ escalation)
+- Tool returned an error → not a trigger (try documented recovery first)
+- Agent feels uncertain about confidence → not a trigger by itself (route by field-level confidence per Task 5.5)
+
+**Related Task 5.2 pattern — multiple-match ambiguity:** When a lookup tool returns multiple potential matches (e.g., `lookup_customer` returns 3 records for "John Smith"), the correct response is to **request a disambiguating identifier** (email, account number, ZIP) — NOT to heuristically pick the most recent / highest-spending / closest match. Heuristic selection is the silent-reconciliation anti-pattern in disguise.
+
 ### Distractor pattern 3: Silent error suppression
 
 Errors disappearing from production logs:
@@ -279,6 +319,30 @@ Subagents producing conflicting values (40% vs 25%):
 - "Use sentiment to pick the most confident"
 - **Correct:** annotate the conflict with attribution. Don't silently reconcile.
 
+**Memorize cold — temporal data in structured synthesis outputs (Task 5.6):**
+
+Apparent conflicts between sources are often **temporal differences misread as contradictions** — Source A says "40% unemployment" from 2019 data; Source B says "25% unemployment" from 2023 data. Both are correct, but uniform prose summarization presents them as a conflict.
+
+**Required pattern: dates as first-class structured fields.**
+- Every claim in the synthesis schema must carry a **publication date** AND/OR **data collection date** (whichever is appropriate to the source).
+- Synthesis agents MUST preserve these date fields through every aggregation step — never strip them when summarizing.
+- When two claims appear to conflict, the coordinator first checks dates. If dates differ materially, the "conflict" is annotated as **temporal evolution**, not a true contradiction.
+- True contradictions (same time period, conflicting sources) get the conflict-annotation treatment from Distractor Pattern 5.
+
+**Schema example:**
+```
+{
+  "claim": "Unemployment was 40% in the affected region",
+  "source_url": "...",
+  "document_name": "...",
+  "publication_date": "2020-03-15",
+  "data_collection_date": "2019-Q4",
+  "conflict_detected": false  // or true with attribution to the conflicting claim
+}
+```
+
+Without dates, the synthesis literally cannot distinguish "outdated agreement" from "current disagreement." The exam tests this directly in sample Q9 contexts.
+
 ### Distractor pattern 6: Same-session "review"
 
 Production quality assurance:
@@ -292,12 +356,43 @@ Routing for human review:
 - "Use record-level confidence score" → distractor; "80% confident in this whole invoice" doesn't tell reviewers which fields to check
 - **Correct:** field-level confidence — "95% on vendor_name, 60% on line_items, 30% on tax_amount" — routes reviewers to specific fields
 
+**Memorize cold — confidence-based routing to human review (Task 5.5):**
+
+When reviewer capacity is **limited** (it always is in production), the documented routing pattern is:
+
+| Extraction state | Route to |
+|---|---|
+| High field-level confidence on all fields | Auto-pass; sample with stratified sampling for accuracy measurement |
+| **Low model confidence** on critical fields | **Human review** (prioritized) |
+| **Ambiguous or contradictory source documents** | **Human review** (prioritized) |
+| High confidence + source clear | Auto-pass |
+
+The routing decision is **not** random sampling, **not** sentiment, **not** record-level — it's:
+1. Field-level confidence below threshold OR
+2. Source ambiguity / source conflicts detected during extraction
+
+Stratified sampling is used on the **auto-pass population** to measure ongoing accuracy by document type and field, not as the primary routing mechanism for low-confidence cases.
+
 ### Distractor pattern 8: "Just compact more often"
 
 Long codebase session degrading:
 - "Run /compact every 10 turns"
 - "Increase compaction frequency"
 - **Correct:** scratchpads + subagent isolation. Compaction is summarization (lossy); scratchpads are external files (lossless).
+
+### Distractor pattern 9: Uniform synthesis without coverage flags
+
+Scenario: A research synthesis agent produces a report covering multiple subtopics. Several subagent searches returned empty or thin results due to source unavailability. The synthesis renders all findings in uniform prose — well-supported and undersupported areas look identical. Readers (and downstream agents) cite the report as confident evidence for areas that actually had thin source backing.
+
+Distractors offered:
+- "Use a larger model that hedges better in prose"
+- "Raise the synthesis temperature so language conveys more uncertainty"
+- "Re-run with a 'confident findings only' instruction that drops thin areas"
+- "Add a human reviewer to insert disclaimers"
+
+**Correct: coverage annotations as structural output.** Restructure the synthesis to explicitly distinguish well-supported findings (e.g., 3+ sources) from coverage-gap areas (sources unavailable, conflicting, or thin). Preserve, in the structured output, which subagent searches returned empty — so the *absence* of evidence is auditable, not just the presence. Without this, the gap is invisible and gets papered over.
+
+This is the same root principle as Distractor Pattern 4 (cite-where-possible) and Distractor Pattern 5 (silent reconciliation): when uncertainty exists, the system must surface it structurally, not paper over it with prose. Prose loses; schema preserves.
 
 ### Subtle distinction 1: Case facts vs conversation summary
 

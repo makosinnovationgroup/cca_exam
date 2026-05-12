@@ -47,11 +47,11 @@ The exam rewards production judgment over SDK familiarity. Distractors reward ov
 ## Read in full · ~4.5 hours
 
 > [!note] URL note
-> The Claude Agent SDK docs moved from `docs.claude.com/en/docs/agent-sdk/...` to `docs.claude.com/en/api/agent-sdk/...` during the rename from Claude Code SDK → Claude Agent SDK (March 2026). Both URL patterns may work as aliases. The canonical current path is `/en/api/agent-sdk/`.
+> The Claude Agent SDK docs moved from `docs.claude.com/en/docs/agent-sdk/...` to `docs.claude.com/en/agent-sdk/...` during the rename from Claude Code SDK → Claude Agent SDK (March 2026). Both URL patterns may work as aliases. The canonical current path is `/en/api/agent-sdk/`.
 
 ### Agent SDK Overview · ~20 min
 
-- [ ] **Read:** `docs.claude.com/en/api/agent-sdk/overview`
+- [ ] **Read:** `docs.claude.com/en/agent-sdk/overview`
 
 The conceptual map. Establishes vocabulary used across every other page: agentic loop, agent definition, subagents, hooks, sessions, MCP servers, plugins.
 
@@ -68,7 +68,7 @@ The conceptual map. Establishes vocabulary used across every other page: agentic
 
 ### Quickstart · ~20 min
 
-- [ ] **Read:** `docs.claude.com/en/api/agent-sdk/quickstart`
+- [ ] **Read:** `docs.claude.com/en/agent-sdk/quickstart`
 
 The bug-fix quickstart shows the canonical SDK setup with `permissionMode: "acceptEdits"` and `cwd:` for filesystem operations. Several testable patterns appear here: how to wire permission mode, how `cwd` interacts with file-system tools, and the minimal options shape.
 
@@ -79,7 +79,7 @@ The bug-fix quickstart shows the canonical SDK setup with `permissionMode: "acce
 
 ### How the agent loop works · ~45 min · **Read twice**
 
-- [ ] **Read:** `docs.claude.com/en/api/agent-sdk/agent-loop`
+- [ ] **Read:** `docs.claude.com/en/agent-sdk/agent-loop`
 - [ ] **Re-read for memorization** (the `stop_reason` values are exam-critical)
 
 The most important page in this domain. Memorize the `stop_reason` values cold.
@@ -105,7 +105,7 @@ The most important page in this domain. Memorize the `stop_reason` values cold.
 
 ### Subagents in the SDK · ~60 min
 
-- [ ] **Read:** `docs.claude.com/en/api/agent-sdk/subagents`
+- [ ] **Read:** `docs.claude.com/en/agent-sdk/subagents`
 
 Covers `AgentDefinition`, `allowedTools`, the **`Agent` tool** for spawning, and the critical "no automatic context inheritance" rule.
 
@@ -126,7 +126,7 @@ Covers `AgentDefinition`, `allowedTools`, the **`Agent` tool** for spawning, and
 
 ### Control execution with hooks · ~60 min
 
-- [ ] **Read:** `docs.claude.com/en/api/agent-sdk/hooks`
+- [ ] **Read:** `docs.claude.com/en/agent-sdk/hooks`
 - [ ] **Re-read for memorization** (this page covers two task statements)
 
 **Memorize cold (Python SDK hook events):**
@@ -161,7 +161,7 @@ return {
 
 ### Connect MCP servers · ~30 min
 
-- [ ] **Read:** `docs.claude.com/en/api/agent-sdk/mcp`
+- [ ] **Read:** `docs.claude.com/en/agent-sdk/mcp`
 
 Crosses Domains 1 and 2. Covers `.mcp.json` (project, shared) vs `~/.claude.json` (user, personal), env var expansion for credentials, transports.
 
@@ -174,7 +174,7 @@ Crosses Domains 1 and 2. Covers `.mcp.json` (project, shared) vs `~/.claude.json
 
 ### Define custom tools · ~30 min
 
-- [ ] **Read:** `docs.claude.com/en/api/agent-sdk/custom-tools`
+- [ ] **Read:** `docs.claude.com/en/agent-sdk/custom-tools`
 
 Tool description quality (Task 2.1), structured error returns (Task 2.2), input schemas.
 
@@ -186,7 +186,7 @@ Tool description quality (Task 2.1), structured error returns (Task 2.2), input 
 
 ### Work with sessions · ~30 min
 
-- [ ] **Read:** `docs.claude.com/en/api/agent-sdk/sessions`
+- [ ] **Read:** `docs.claude.com/en/agent-sdk/sessions`
 
 Task 1.7. Covers `--resume`, `continue`, `fork_session`, named sessions, the resume-vs-fresh decision.
 
@@ -205,7 +205,7 @@ Task 1.7. Covers `--resume`, `continue`, `fork_session`, named sessions, the res
 
 ### Agent Skills in the SDK · ~45 min
 
-- [ ] **Read:** `docs.claude.com/en/api/agent-sdk/skills`
+- [ ] **Read:** `docs.claude.com/en/agent-sdk/skills`
 
 The SDK side of skills — overlaps significantly with the Claude Code `code.claude.com/docs/en/skills` page. The Claude Code page is the **authoritative frontmatter reference** (covered in the Domain 3 roadmap).
 
@@ -238,7 +238,7 @@ The SDK side of skills — overlaps significantly with the Claude Code `code.cla
 
 ### Slash Commands in the SDK · ~20 min
 
-- [ ] **Read:** `docs.claude.com/en/api/agent-sdk/slash-commands`
+- [ ] **Read:** `docs.claude.com/en/agent-sdk/slash-commands`
 
 Project vs user-scoped commands. Slash commands and skills are merged — a file at `.claude/commands/deploy.md` and a skill at `.claude/skills/deploy/SKILL.md` both create `/deploy` and work the same way.
 
@@ -250,13 +250,13 @@ Project vs user-scoped commands. Slash commands and skills are merged — a file
 
 ### Use Claude Code features · ~30 min
 
-- [ ] **Read:** `docs.claude.com/en/api/agent-sdk/claude-code-features`
+- [ ] **Read:** `docs.claude.com/en/agent-sdk/claude-code-features`
 
 Synthesis page — explains how the SDK exposes CLAUDE.md, skills, hooks, slash commands, and plugins programmatically. Helpful for seeing how the SDK and Claude Code share infrastructure.
 
 ### Modifying system prompts · ~20 min
 
-- [ ] **Read:** `docs.claude.com/en/api/agent-sdk/system-prompts`
+- [ ] **Read:** `docs.claude.com/en/agent-sdk/system-prompts`
 
 How to set or modify the system prompt programmatically. Append-mode vs replace-mode.
 
@@ -268,7 +268,7 @@ How to set or modify the system prompt programmatically. Append-mode vs replace-
 
 ### Handling Permissions · ~15 min
 
-- [ ] **Read:** `docs.claude.com/en/api/agent-sdk/permissions`
+- [ ] **Read:** `docs.claude.com/en/agent-sdk/permissions`
 
 Touches Domain 1.5 (hooks vs permissions) and Domain 5.2 (escalation).
 
@@ -279,7 +279,7 @@ Touches Domain 1.5 (hooks vs permissions) and Domain 5.2 (escalation).
 
 ### User approvals and input · ~15 min
 
-- [ ] **Read:** `docs.claude.com/en/api/agent-sdk/user-approvals`
+- [ ] **Read:** `docs.claude.com/en/agent-sdk/user-approvals`
 
 **Memorize cold:**
 - `AskUserQuestion` tool lets the agent ask the user multiple-choice questions during execution
@@ -292,31 +292,31 @@ Touches Domain 1.5 (hooks vs permissions) and Domain 5.2 (escalation).
 
 ### Structured outputs in the SDK
 
-- [ ] **Skim:** `docs.claude.com/en/api/agent-sdk/structured-outputs`
+- [ ] **Skim:** `docs.claude.com/en/agent-sdk/structured-outputs`
 
 The API-side `structured-outputs` page is more authoritative — but skim for SDK-specific patterns (`output_config.format` integration). Detailed coverage lives in the Domain 4 roadmap.
 
 ### File checkpointing
 
-- [ ] **Skim:** `docs.claude.com/en/api/agent-sdk/file-checkpointing`
+- [ ] **Skim:** `docs.claude.com/en/agent-sdk/file-checkpointing`
 
 The filesystem analog to session forking. Sessions persist conversation; checkpointing persists filesystem state. Not heavily tested but worth knowing exists.
 
 ### Track cost and usage
 
-- [ ] **Skim:** `docs.claude.com/en/api/agent-sdk/cost-tracking`
+- [ ] **Skim:** `docs.claude.com/en/agent-sdk/cost-tracking`
 
 Token-level cost tracking. Light familiarity helps when reading scenarios about cost-optimization.
 
 ### Tool search
 
-- [ ] **Skim:** `docs.claude.com/en/api/agent-sdk/tool-search`
+- [ ] **Skim:** `docs.claude.com/en/agent-sdk/tool-search`
 
 For agents with hundreds or thousands of tools. Tool definitions are deferred via `defer_loading: true` and discovered on-demand by Claude. Ties to Domain 2.3 (tool distribution).
 
 ### Plugins in the SDK
 
-- [ ] **Skim:** `docs.claude.com/en/api/agent-sdk/plugins`
+- [ ] **Skim:** `docs.claude.com/en/agent-sdk/plugins`
 
 Plugin system for distributing skills, agents, commands. Skim for terminology.
 
@@ -327,12 +327,12 @@ Plugin system for distributing skills, agents, commands. Skim for terminology.
 > [!warning] Don't get pulled in
 > Per the exam guide's explicit out-of-scope list:
 
-- **Streaming Input** — `docs.claude.com/en/api/agent-sdk/streaming-input` — streaming is out of scope
-- **Stream responses in real-time** — `docs.claude.com/en/api/agent-sdk/streaming` — streaming is out of scope
-- **Hosting the Agent SDK** — `docs.claude.com/en/api/agent-sdk/hosting` — deployment infrastructure
-- **Securely deploying AI agents** — `docs.claude.com/en/api/agent-sdk/secure-deployment` — deployment infrastructure
-- **Todo Lists** — `docs.claude.com/en/api/agent-sdk/todo-lists` — operational feature
-- **Migration Guide** — `docs.claude.com/en/api/agent-sdk/migration` — only relevant if migrating from old SDK
+- **Streaming Input** — `docs.claude.com/en/agent-sdk/streaming-input` — streaming is out of scope
+- **Stream responses in real-time** — `docs.claude.com/en/agent-sdk/streaming` — streaming is out of scope
+- **Hosting the Agent SDK** — `docs.claude.com/en/agent-sdk/hosting` — deployment infrastructure
+- **Securely deploying AI agents** — `docs.claude.com/en/agent-sdk/secure-deployment` — deployment infrastructure
+- **Todo Lists** — `docs.claude.com/en/agent-sdk/todo-lists` — operational feature
+- **Migration Guide** — `docs.claude.com/en/agent-sdk/migration` — only relevant if migrating from old SDK
 - **TypeScript SDK reference / TypeScript V2 / Python SDK reference** — API references, not study material (use as lookup)
 - **Observability with OpenTelemetry** — out of scope
 
